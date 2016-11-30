@@ -3,11 +3,14 @@ package com.example.guest.openweather;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.guest.openweather.adapters.DailyWeatherAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ import okhttp3.Response;
 public class WeatherActivity extends AppCompatActivity {
     public static final String TAG = WeatherActivity.class.getSimpleName();
     @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
-    @Bind(R.id.listView) ListView mListView;
+    private DailyWeatherAdapter mAdapter;
 
     public ArrayList<Weather> mWeathers = new ArrayList<>();
 
@@ -50,17 +53,12 @@ public class WeatherActivity extends AppCompatActivity {
                 WeatherActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String [] weatherDays = new String[mWeathers.size()];
-                        for (int i = 0; i < weatherDays.length; i++) {
-                            weatherDays[i] = mWeathers.get(i).getIcon();
-                        }
-                        ArrayAdapter adapter = new ArrayAdapter(WeatherActivity.this,
-                                android.R.layout.simple_list_item_1, weatherDays);
-                        mListView.setAdapter(adapter);
-
-                        for (Weather weather : mWeathers) {
-                            Log.d(TAG, "date: " + weather.getDescription());
-                        }
+                        mAdapter = new DailyWeatherAdapter(getApplicationContext(), mWeathers);
+                        mRecyclerView.setAdapter(mAdapter);
+                        RecyclerView.LayoutManager layoutManager =
+                                new LinearLayoutManager(WeatherActivity.this);
+                        mRecyclerView.setLayoutManager(layoutManager);
+                        mRecyclerView.setHasFixedSize(true);
                     }
                 });
             }
