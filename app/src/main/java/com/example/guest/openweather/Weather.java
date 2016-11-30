@@ -1,5 +1,8 @@
 package com.example.guest.openweather;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Guest on 11/29/16.
  */
@@ -25,10 +28,14 @@ public class Weather {
 //    }
 
     public String getIcon() {
-        return mIcon;
+        String url = "http://openweathermap.org/img/w/" + mIcon + ".png";
+        return url;
     }
 
     public String getDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
+        Date date = new Date(Long.parseLong(mDate)*1000);
+        mDate = formatter.format(date);
         return mDate;
     }
 

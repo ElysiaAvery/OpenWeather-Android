@@ -21,6 +21,8 @@ import butterknife.ButterKnife;
  * Created by Guest on 11/29/16.
  */
 public class DailyWeatherAdapter extends RecyclerView.Adapter<DailyWeatherAdapter.WeatherViewHolder> {
+    private static final int MAX_WIDTH = 50;
+    private static final int MAX_HEIGHT = 50;
     private ArrayList<Weather> mWeathers = new ArrayList<>();
     private Context mContext;
 
@@ -61,10 +63,14 @@ public class DailyWeatherAdapter extends RecyclerView.Adapter<DailyWeatherAdapte
         }
 
         public void bindWeather(Weather weather) {
-//            Picasso.with(mContext).load(weather.getImageUrl()).into(mWeatherIcon);
+            Picasso.with(mContext)
+                    .load(weather.getIcon())
+                    .resize(MAX_WIDTH, MAX_HEIGHT)
+                    .centerCrop()
+                    .into(mWeatherIcon);
             mWeatherDate.setText(weather.getDate());
             mWeatherDescription.setText(weather.getDescription());
-            mWeatherTemperature.setText(weather.getTemperature()+"");
+            mWeatherTemperature.setText("Temperature: " + weather.getTemperature()+"°F");
         }
     }
 }

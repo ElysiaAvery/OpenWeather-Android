@@ -33,7 +33,6 @@ public class WeatherService {
         urlBuilder.addQueryParameter("units", "imperial");
         urlBuilder.addQueryParameter("cnt", "7");
         String url = urlBuilder.build().toString();
-        Log.v(TAG, url);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -50,13 +49,10 @@ public class WeatherService {
             String jsonData = response.body().string();
             if (response.isSuccessful()) {
                 JSONObject weatherJSON = new JSONObject(jsonData);
-                Log.v(TAG, "here" + weatherJSON.toString());
                 JSONArray daysOfWeatherJSON = weatherJSON.getJSONArray("list");
-                Log.v(TAG, "in days of weather " + daysOfWeatherJSON.toString());
                 for (int i = 0; i < daysOfWeatherJSON.length(); i++) {
                     JSONObject dayWeatherJSON = daysOfWeatherJSON.getJSONObject(i);
                     String icon = dayWeatherJSON.getJSONArray("weather").getJSONObject(0).getString("icon");
-//                    String country = dayWeatherJSON.getString("country");
                     String date = dayWeatherJSON.getString("dt");
                     String description = dayWeatherJSON.getJSONArray("weather").getJSONObject(0).getString("description");
                     double temperature = dayWeatherJSON.getJSONObject("temp").getDouble("day");
