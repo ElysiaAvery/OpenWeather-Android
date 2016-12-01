@@ -1,6 +1,7 @@
 package com.example.guest.openweather.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 
 import com.example.guest.openweather.R;
 import com.example.guest.openweather.Weather;
+import com.example.guest.openweather.WeatherDetailActivity;
 import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -23,12 +27,12 @@ import butterknife.ButterKnife;
 public class DailyWeatherAdapter extends RecyclerView.Adapter<DailyWeatherAdapter.WeatherViewHolder> {
     private static final int MAX_WIDTH = 50;
     private static final int MAX_HEIGHT = 50;
-    private ArrayList<Weather> mWeathers = new ArrayList<>();
+    private ArrayList<Weather> mWeather = new ArrayList<>();
     private Context mContext;
 
     public DailyWeatherAdapter(Context context, ArrayList<Weather> weathers) {
         mContext = context;
-        mWeathers = weathers;
+        mWeather = weathers;
     }
 
     @Override
@@ -40,15 +44,15 @@ public class DailyWeatherAdapter extends RecyclerView.Adapter<DailyWeatherAdapte
 
     @Override
     public void onBindViewHolder(DailyWeatherAdapter.WeatherViewHolder holder, int position) {
-        holder.bindWeather(mWeathers.get(position));
+        holder.bindWeather(mWeather.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mWeathers.size();
+        return mWeather.size();
     }
 
-    public class WeatherViewHolder extends RecyclerView.ViewHolder {
+    public class WeatherViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @Bind(R.id.weatherIcon) ImageView mWeatherIcon;
         @Bind(R.id.weatherDate) TextView mWeatherDate;
         @Bind(R.id.weatherDescription) TextView mWeatherDescription;
@@ -60,6 +64,16 @@ public class DailyWeatherAdapter extends RecyclerView.Adapter<DailyWeatherAdapte
             super(itemView);
             ButterKnife.bind(this, itemView);
             mContext = itemView.getContext();
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int itemPosition = getLayoutPosition();
+            Intent intent = new Intent(mContext, WeatherDetailActivity.class);
+            intent.putExtra("position", itemPosition);
+            intent.putExtra("weather", Parcels.wrap(mWeather));
+            mContext.startActivity(intent);
         }
 
         public void bindWeather(Weather weather) {

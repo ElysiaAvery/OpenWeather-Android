@@ -26,7 +26,7 @@ public class WeatherActivity extends AppCompatActivity {
     @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
     private DailyWeatherAdapter mAdapter;
 
-    public ArrayList<Weather> mWeathers = new ArrayList<>();
+    public ArrayList<Weather> mWeather = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +49,11 @@ public class WeatherActivity extends AppCompatActivity {
             }
             @Override
             public void onResponse(Call call, Response response) {
-              mWeathers = weatherService.processResults(response);
+              mWeather = weatherService.processResults(response);
                 WeatherActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mAdapter = new DailyWeatherAdapter(getApplicationContext(), mWeathers);
+                        mAdapter = new DailyWeatherAdapter(getApplicationContext(), mWeather);
                         mRecyclerView.setAdapter(mAdapter);
                         RecyclerView.LayoutManager layoutManager =
                                 new LinearLayoutManager(WeatherActivity.this);
